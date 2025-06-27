@@ -1,15 +1,31 @@
 import './style.css';
 import Trash from "../../assets/Trash.png";
 import api from '../../services/api';
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
+
 
 function Home() {
+  const [users, setUsers] = useState([])
 
-  let users = []
+  const inputName = useRef()
+  const inputAge = useRef()
+  const inputEmail = useRef()
+
 
   async function getUsers() {
-    users = await api.get('/usuarios')
-    console.log(users)
+    const usersFromApi = await api.get('/usuarios')
+
+    setUsers(usersFromApi.data)
+  }
+
+  async function createUsers() {
+    await api.post('/usuarios', {
+      name: inputName.current.value,
+      age: inputAge.current.value,
+      email: inputEmail.current.value,
+    })
+
+
   }
 
   useEffect(() => {
@@ -22,10 +38,10 @@ function Home() {
       <div className='container'>
         <form action="">
           <h1>Cadastro de usuários</h1>
-          <input placeholder="nome" name='nome' type="text" />
-          <input placeholder="idade" name='idade' type="number" />
-          <input placeholder="email" name='email' type="email" />
-          <button type="button">Cadastrar</button>
+          <input placeholder="nome" name='nome' type="text" ref={inputName} />
+          <input placeholder="idade" name='idade' type="number" ref={inputAge} />
+          <input placeholder="email" name='email' type="email" ref={inputEmail} />
+          <button type="button" onClick={createUsers}>Cadastrar</button>
         </form>
 
         {
