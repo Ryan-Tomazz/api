@@ -22,10 +22,15 @@ function Home() {
     await api.post('/usuarios', {
       name: inputName.current.value,
       age: inputAge.current.value,
-      email: inputEmail.current.value,
+      email: inputEmail.current.value
     })
 
+    getUsers()
+  }
 
+  async function deleteUsers(id) {
+    await api.delete(`/usuarios/${id}`)
+    getUsers()
   }
 
   useEffect(() => {
@@ -52,7 +57,7 @@ function Home() {
                 <p>idade: <span>{user.age}</span></p>
                 <p>email: <span>{user.email}</span></p>
               </div>
-              <button type="button">
+              <button  onClick={() => deleteUsers(user.id)}>
                 <img src={Trash} alt="Excluir" />
               </button>
             </div>
